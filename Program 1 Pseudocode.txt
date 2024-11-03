@@ -1,0 +1,33 @@
+Program 1 Pseudocode
+
+numArr= new arr[20]
+
+R0 = input()
+R2 = 0
+numArr[R2] = R0
+R1 = 19
+
+while R1 > 0:
+    R0 = input()
+    R2++
+    numArr[R2] = R0
+    R1--
+
+R0 = input()
+target = R0
+R0 = 20
+R1 = -1
+
+while R0 > 0:
+    R1++
+    R2 = numArr[R1]
+    R2 -= target
+    temp = R2
+    R2 -= curLowestDiff
+
+    if R2 < 0:
+        R2 = temp
+        curLowestDiff = R2
+        R2 = numArr[R1]
+        curLowestNum = R2
+    R0--
