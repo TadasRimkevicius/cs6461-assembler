@@ -1,17 +1,30 @@
-			LOC	6	;BEGIN AT LOCATION 6	
-000006	000012		Data	10	;PUT 10 AT LOCATION 6	
-000007	000003		Data	3	;PUT 3 AT LOCATION 7	
-000010	000006		Data	End	;PUT 1024 AT LOCATION 8	
-000011	000000		Data	0		
-000012	000002		Data	2		
-000013	000011		Data	9		
-000014	000022		Data	18		
-000015	000014		Data	12		
-000016	102207		LDX	2,7 	;X2 GETS 3	
-000017	003412		LDR	3,0,10 	;R3 GETS 12	
-000020	003212		LDR	2,2,10 	;R2 GETS 12	
-000021	002652		LDR	1,2,10,1 	;R1 GETS 18	
-000022	006000		LDA	0,0,0 	;R0 GETS 0 to set CONDITION CODE	
-000023	102110		LDX	1,8 	;X1 GETS 1024	
-000024	020100		JZ	0,1,0 	;JUMP TO End IF R0 = 0	
-000025	000000	End:	HLT		;STOP	
+			LOC	6		
+000006	142000		IN	0,0	;Load initial number	
+000007	004006		STR	0,0,6	;Store number in R0 in location 6 (using 6-26 for the list of 20)	
+000010	006423		LDA	1,0,19	;Set up counter in R1 for the other 19 numbers	
+000011	007006		LDA	2,0,6	;Set up location counter for storing the 20 numbers	
+			LOC	10	;READ-LOOP	
+000012	142000		IN	0,0	;Load next number	
+000013	015001		AIR	2,1	;Increment register 2 by one	
+000014	004200		STR	0,2,0	;Store in location pointed to by R2	
+000015	034412		SOB	1,0,10	;Sub 1 from the counter Register (R1), cont if R1<0 	
+000016	142000		IN	0,0	;Request Target Number	
+000017	004032		STR	0,0,26	;Target number stored in 26	
+000020	006024		LDA	0,0,20	;Reset Counter for going through entire list	
+000021	006405		LDA	1,0,5	;Reset location tracking register	
+			LOC	20	;DISTANCE-LOOP	
+000024	014401		AIR	1,1	;Increment R1 to point to next number	
+000025	003100		LDR	2,1,0	;Load next number to check	
+000026	013032		SMR	2,0,26	;Calc difference to target	
+000027	005037		STR	2,0,31	;Store as temp lowest diff in case we need it	
+000030	013034		SMR	2,0,28	;28 has cur lowest distance	
+000031	037037		JGE	2,0,31		
+000032	003037		LDR	2,0,31	;Load temp num (cur lowest diff)	
+000033	005034		STR	2,0,28	;Store cur lowest diff	
+000034	003100		LDR	2,1,0	;Load initial number	
+000035	005033		STR	2,0,27	;Store num as cur lowest	
+			LOC	31	;ENDING	
+000037	034024		SOB	0,0,20		
+000040	145401		OUT	3,1		
+000041	312401		OUT	5,1		
+000042	000000		HLT			

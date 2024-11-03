@@ -1,17 +1,30 @@
-	LOC	6	;BEGIN AT LOCATION 6
-	Data	10	;PUT 10 AT LOCATION 6
-	Data	3	;PUT 3 AT LOCATION 7
-	Data	End	;PUT 1024 AT LOCATION 8
-	Data	0
-	Data	2
-	Data	9
-	Data	18
-	Data	12
-	LDX	2,7 	;X2 GETS 3
-	LDR	3,0,10 	;R3 GETS 12
-	LDR	2,2,10 	;R2 GETS 12
-	LDR	1,2,10,1 	;R1 GETS 18
-	LDA	0,0,0 	;R0 GETS 0 to set CONDITION CODE
-	LDX	1,8 	;X1 GETS 1024
-	JZ	0,1,0 	;JUMP TO End IF R0 = 0
-End:	HLT		;STOP
+	LOC	6
+	IN	0,0	;Load initial number
+	STR	0,0,6	;Store number in R0 in location 6 (using 6-26 for the list of 20)
+	LDA	1,0,19	;Set up counter in R1 for the other 19 numbers
+	LDA	2,0,6	;Set up location counter for storing the 20 numbers
+	LOC	10	;READ-LOOP
+	IN	0,0	;Load next number
+	AIR	2,1	;Increment register 2 by one
+	STR	0,2,0	;Store in location pointed to by R2
+	SOB	1,0,10	;Sub 1 from the counter Register (R1), cont if R1<0 
+	IN	0,0	;Request Target Number
+	STR	0,0,26	;Target number stored in 26
+	LDA	0,0,20	;Reset Counter for going through entire list
+	LDA	1,0,5	;Reset location tracking register
+	LOC	20	;DISTANCE-LOOP
+	AIR	1,1	;Increment R1 to point to next number
+	LDR	2,1,0	;Load next number to check
+	SMR	2,0,26	;Calc difference to target
+	STR	2,0,31	;Store as temp lowest diff in case we need it
+	SMR	2,0,28	;28 has cur lowest distance
+	JGE	2,0,31
+	LDR	2,0,31	;Load temp num (cur lowest diff)
+	STR	2,0,28	;Store cur lowest diff
+	LDR	2,1,0	;Load initial number
+	STR	2,0,27	;Store num as cur lowest
+	LOC	31	;ENDING
+	SOB	0,0,20
+	OUT	3,1
+	OUT	5,1
+	HLT

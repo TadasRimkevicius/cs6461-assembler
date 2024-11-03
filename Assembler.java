@@ -36,6 +36,7 @@ public class Assembler{
         initialize_immed();
         
         firstPass();
+        System.out.println(labelDict);
 
         scanner.close();
         listing_writer.close();
@@ -77,7 +78,12 @@ public class Assembler{
             String[] split_operands;
             String label = dataArr[0];
             String operation = dataArr[1];
-            String operands = dataArr[2];
+            String operands = "";
+            
+            if(dataArr.length > 2){
+                operands = dataArr[2];
+            }
+
             String comment = "";
             String instruction = "";
             String register = "";
@@ -331,7 +337,7 @@ public class Assembler{
         instructions.put("AMR", "000100");
         instructions.put("SMR", "000101");
         instructions.put("AIR", "000110");
-        instructions.put("SIR", "111001");
+        instructions.put("SIR", "000111");
         instructions.put("MLT", "111000");
         instructions.put("DVD", "111010");
         instructions.put("TRR", "111011");
